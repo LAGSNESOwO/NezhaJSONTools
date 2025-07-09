@@ -22,7 +22,9 @@ function formatLocal(date) {
 function updateTrafficRule() {
     const type = document.getElementById('ruleType').value;
     const min = document.getElementById('minValue').value;
+    const minUnit = Number(document.getElementById('minUnit').value);
     const max = document.getElementById('maxValue').value;
+    const maxUnit = Number(document.getElementById('maxUnit').value);
     const start = document.getElementById('cycleStart').value;
     const interval = document.getElementById('cycleInterval').value;
     const unit = document.getElementById('cycleUnit').value;
@@ -37,8 +39,8 @@ function updateTrafficRule() {
     const obj = {
         type: type,
     };
-    if (min) obj.min = Number(min);
-    if (max) obj.max = Number(max);
+    if (min) obj.min = Number(min) * minUnit;
+    if (max) obj.max = Number(max) * maxUnit;
     if (start) obj.cycle_start = new Date(start).toISOString();
     obj.cycle_interval = Number(interval);
     obj.cycle_unit = unit;

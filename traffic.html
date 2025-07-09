@@ -30,6 +30,7 @@
                 <a href="traffic.html" class="active">流量监控</a>
                 <a href="alert.html">警报规则</a>
             </nav>
+            <p class="star-tip"><a href="https://github.com/LAGSNESOwO/NezhaJSONTools/" target="_blank">请到 GitHub 为项目点亮 Star！</a></p>
         </header>
 
         <div class="main-content">
@@ -48,12 +49,30 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>最小值 (字节)</label>
-                            <input type="number" id="minValue" onchange="updateTrafficRule()">
+                            <label>最小值</label>
+                            <div class="input-group">
+                                <input type="number" id="minValue" onchange="updateTrafficRule()">
+                                <select id="minUnit" onchange="updateTrafficRule()">
+                                    <option value="1">B</option>
+                                    <option value="1024">KB</option>
+                                    <option value="1048576">MB</option>
+                                    <option value="1073741824" selected>GB</option>
+                                    <option value="1099511627776">TB</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label>最大值 (字节)</label>
-                            <input type="number" id="maxValue" onchange="updateTrafficRule()">
+                            <label>最大值</label>
+                            <div class="input-group">
+                                <input type="number" id="maxValue" onchange="updateTrafficRule()">
+                                <select id="maxUnit" onchange="updateTrafficRule()">
+                                    <option value="1">B</option>
+                                    <option value="1024">KB</option>
+                                    <option value="1048576">MB</option>
+                                    <option value="1073741824" selected>GB</option>
+                                    <option value="1099511627776">TB</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>周期开始</label>
