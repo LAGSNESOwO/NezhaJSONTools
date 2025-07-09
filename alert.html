@@ -27,8 +27,8 @@
             </div>
             <nav class="page-switcher">
                 <a href="index.html">备注显示</a>
-                <a href="traffic.html" class="active">流量监控</a>
-                <a href="alert.html">警报规则</a>
+                <a href="traffic.html">流量监控</a>
+                <a href="alert.html" class="active">警报规则</a>
             </nav>
         </header>
 
@@ -36,53 +36,55 @@
             <div class="settings-panel">
                 <div class="form-section">
                     <div class="section-header">
-                        <h3 class="section-title"><i class="fas fa-chart-line"></i> 流量监控规则</h3>
+                        <h3 class="section-title"><i class="fas fa-bell"></i> 警报规则</h3>
                     </div>
                     <div class="form-content">
                         <div class="form-group">
                             <label>类型</label>
-                            <select id="ruleType" onchange="updateTrafficRule()">
-                                <option value="transfer_in_cycle">入站流量</option>
-                                <option value="transfer_out_cycle" selected>出站流量</option>
-                                <option value="transfer_all_cycle">双向流量</option>
+                            <select id="alertType" onchange="updateAlertRule()">
+                                <option value="cpu">cpu</option>
+                                <option value="gpu">gpu</option>
+                                <option value="memory">memory</option>
+                                <option value="swap">swap</option>
+                                <option value="disk">disk</option>
+                                <option value="net_in_speed">net_in_speed</option>
+                                <option value="net_out_speed">net_out_speed</option>
+                                <option value="net_all_speed">net_all_speed</option>
+                                <option value="transfer_in">transfer_in</option>
+                                <option value="transfer_out">transfer_out</option>
+                                <option value="transfer_all">transfer_all</option>
+                                <option value="offline">offline</option>
+                                <option value="load1">load1</option>
+                                <option value="load5">load5</option>
+                                <option value="load15">load15</option>
+                                <option value="process_count">process_count</option>
+                                <option value="tcp_conn_count">tcp_conn_count</option>
+                                <option value="udp_conn_count">udp_conn_count</option>
+                                <option value="temperature_max">temperature_max</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>最小值 (字节)</label>
-                            <input type="number" id="minValue" onchange="updateTrafficRule()">
+                            <label>最小值</label>
+                            <input type="number" id="alertMin" onchange="updateAlertRule()">
                         </div>
                         <div class="form-group">
-                            <label>最大值 (字节)</label>
-                            <input type="number" id="maxValue" onchange="updateTrafficRule()">
+                            <label>最大值</label>
+                            <input type="number" id="alertMax" onchange="updateAlertRule()">
                         </div>
                         <div class="form-group">
-                            <label>周期开始</label>
-                            <input type="datetime-local" id="cycleStart" onchange="updateTrafficRule()">
-                        </div>
-                        <div class="form-group">
-                            <label>周期数量</label>
-                            <input type="number" id="cycleInterval" value="1" onchange="updateTrafficRule()">
-                        </div>
-                        <div class="form-group">
-                            <label>周期单位</label>
-                            <select id="cycleUnit" onchange="updateTrafficRule()">
-                                <option value="hour">hour</option>
-                                <option value="day">day</option>
-                                <option value="week">week</option>
-                                <option value="month" selected>month</option>
-                                <option value="year">year</option>
-                            </select>
+                            <label>持续时间 (秒)</label>
+                            <input type="number" id="alertDuration" value="10" onchange="updateAlertRule()">
                         </div>
                         <div class="form-group">
                             <label>覆盖</label>
                             <label class="toggle-switch">
-                                <input type="checkbox" id="cover" onchange="updateTrafficRule()">
+                                <input type="checkbox" id="alertCover" onchange="updateAlertRule()">
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div class="form-group">
                             <label>忽略服务器 (用逗号分隔ID)</label>
-                            <input type="text" id="ignoreList" placeholder="3,4" onchange="updateTrafficRule()">
+                            <input type="text" id="alertIgnore" placeholder="3,4" onchange="updateAlertRule()">
                         </div>
                     </div>
                 </div>
@@ -93,7 +95,7 @@
                     <h3><i class="fas fa-code"></i> JSON 配置</h3>
                     <div class="panel-controls-group">
                         <div class="panel-controls" onclick="event.stopPropagation()">
-                            <button class="copy-btn" onclick="copyTrafficCode(event)">
+                            <button class="copy-btn" onclick="copyAlertCode(event)">
                                 <i class="fas fa-copy"></i>
                                 <span>复制</span>
                             </button>
@@ -101,7 +103,7 @@
                     </div>
                 </div>
                 <div class="code-container">
-                    <textarea id="trafficJson" spellcheck="false"></textarea>
+                    <textarea id="alertJson" spellcheck="false"></textarea>
                 </div>
             </div>
         </div>
@@ -181,6 +183,6 @@
     <!-- 不蒜子统计 -->
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <script src="script.js"></script>
-    <script src="traffic.js"></script>
+    <script src="alert.js"></script>
 </body>
 </html> 
