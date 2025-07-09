@@ -10,19 +10,26 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1><i class="fas fa-server"></i> NezhaJsonTools</h1>
-            <div class="header-controls">
-                <button class="ai-btn" id="aiModeBtn">
-                    <i class="fas fa-flask"></i>
-                    <span>使用 AI 生成 JSON</span>
-                </button>
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <i class="fas fa-sun"></i>
-                </button>
-                <button class="language-toggle" onclick="toggleLanguage()">
-                    <span id="lang-indicator">English</span>
-                </button>
+            <div class="header-top">
+                <h1><i class="fas fa-server"></i> NezhaJsonTools</h1>
+                <div class="header-controls">
+                    <button class="ai-btn" id="aiModeBtn">
+                        <i class="fas fa-flask"></i>
+                        <span>使用 AI 生成 JSON</span>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="language-toggle" onclick="toggleLanguage()">
+                        <span id="lang-indicator">English</span>
+                    </button>
+                </div>
             </div>
+            <nav class="page-switcher">
+                <a href="index.html" class="active">备注显示</a>
+                <a href="traffic.html">流量监控</a>
+                <a href="alert.html">警报规则</a>
+            </nav>
         </header>
 
         <div class="main-content" id="settings-view">

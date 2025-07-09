@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NezhaJsonTools</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-top">
+                <h1><i class="fas fa-server"></i> NezhaJsonTools</h1>
+                <div class="header-controls">
+                    <button class="ai-btn" id="aiModeBtn">
+                        <i class="fas fa-flask"></i>
+                        <span>使用 AI 生成 JSON</span>
+                    </button>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                    <button class="language-toggle" onclick="toggleLanguage()">
+                        <span id="lang-indicator">English</span>
+                    </button>
+                </div>
+            </div>
+            <nav class="page-switcher">
+                <a href="index.html">备注显示</a>
+                <a href="traffic.html" class="active">流量监控</a>
+                <a href="alert.html">警报规则</a>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <div class="settings-panel">
+                <div class="form-section">
+                    <div class="section-header">
+                        <h3 class="section-title"><i class="fas fa-chart-line"></i> 流量监控规则</h3>
+                    </div>
+                    <div class="form-content">
+                        <div class="form-group">
+                            <label>类型</label>
+                            <select id="ruleType" onchange="updateTrafficRule()">
+                                <option value="transfer_in_cycle">入站流量</option>
+                                <option value="transfer_out_cycle" selected>出站流量</option>
+                                <option value="transfer_all_cycle">双向流量</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>最小值 (字节)</label>
+                            <input type="number" id="minValue" onchange="updateTrafficRule()">
+                        </div>
+                        <div class="form-group">
+                            <label>最大值 (字节)</label>
+                            <input type="number" id="maxValue" onchange="updateTrafficRule()">
+                        </div>
+                        <div class="form-group">
+                            <label>周期开始</label>
+                            <input type="datetime-local" id="cycleStart" onchange="updateTrafficRule()">
+                        </div>
+                        <div class="form-group">
+                            <label>周期数量</label>
+                            <input type="number" id="cycleInterval" value="1" onchange="updateTrafficRule()">
+                        </div>
+                        <div class="form-group">
+                            <label>周期单位</label>
+                            <select id="cycleUnit" onchange="updateTrafficRule()">
+                                <option value="hour">hour</option>
+                                <option value="day">day</option>
+                                <option value="week">week</option>
+                                <option value="month" selected>month</option>
+                                <option value="year">year</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>覆盖</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="cover" onchange="updateTrafficRule()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>忽略服务器 (用逗号分隔ID)</label>
+                            <input type="text" id="ignoreList" placeholder="3,4" onchange="updateTrafficRule()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-code"></i> JSON 配置</h3>
+                    <div class="panel-controls-group">
+                        <div class="panel-controls" onclick="event.stopPropagation()">
+                            <button class="copy-btn" onclick="copyTrafficCode(event)">
+                                <i class="fas fa-copy"></i>
+                                <span>复制</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-container">
+                    <textarea id="trafficJson" spellcheck="false"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div id="ai-chat-view" style="display: none;">
+            <div class="ai-chat-panel">
+                <div class="ai-chat-header" id="aiChatHeader">
+                    <h3><i class="fas fa-robot"></i> AI 聊天助手</h3>
+                    <div class="window-controls">
+                        <button class="window-btn close-btn" id="aiCloseBtn" title="关闭">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mobile-controls">
+                        <button class="mobile-close-btn" id="mobileCloseBtn" title="关闭">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chat-box" id="chatBox">
+                    <!-- 聊天气泡将会动态添加到这里 -->
+                </div>
+                <div class="chat-input-area">
+                    <textarea id="chatInput" placeholder="输入你的消息..." rows="3"></textarea>
+                    <div class="chat-buttons">
+                        <button id="sendMessageBtn" title="发送"><i class="fas fa-paper-plane"></i></button>
+                        <button id="clearContextBtn" title="清除上下文"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 警告模态框 -->
+    <div id="warningModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4><i class="fas fa-exclamation-triangle"></i> <span data-key="warning">警告</span></h4>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="warningMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" data-key="understand">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 复制成功提示 -->
+    <div id="copyToast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span></span>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <p>By <a href="https://lagsn.es" target="_blank" rel="noopener">LAGSNES</a></p>
+                <p>本网站使用 AIGC 技术</p>
+                <p>AI 助手使用 Qwen3 和 硅基流动</p>
+            </div>
+            <div class="footer-section">
+                <p><a href="https://github.com/LAGSNESOwO/NezhaJSONTools" target="_blank" rel="noopener">
+                    <i class="fab fa-github"></i> GitHub
+                </a></p>
+                <div class="footer-stats">
+                    <span id="busuanzi_container_site_pv">总访问量 <span id="busuanzi_value_site_pv"></span> 次</span>
+                    <span id="busuanzi_container_site_uv">总访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+                </div>
+                <p class="footer-note">永久免费使用</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 不蒜子统计 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script src="script.js"></script>
+    <script src="traffic.js"></script>
+</body>
+</html> 

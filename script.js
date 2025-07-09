@@ -1102,6 +1102,43 @@ document.addEventListener('DOMContentLoaded', function() {
 - **networkRoute**: AS号码 (如 "4837")
 - **extra**: 额外标签/备注信息
 
+### 流量监控规则 (trafficRules)
+- **type**: transfer_in_cycle / transfer_out_cycle / transfer_all_cycle
+- **cycle_start**: 周期开始时间 (RFC3339)
+- **cycle_interval**: 周期数量
+- **cycle_unit**: hour/day/week/month/year
+- **min** / **max**: 流量阈值
+- **cover**: 1 覆盖, 0 追加
+- **ignore**: 忽略的服务器ID列表
+
+示例:
+\`\`\`json
+[
+  {
+    "type": "transfer_out_cycle",
+    "max": 1099511627776,
+    "cycle_start": "2022-01-01T00:00:00+08:00",
+    "cycle_interval": 1,
+    "cycle_unit": "month",
+    "cover": 1,
+    "ignore": {"3": true, "4": true}
+  }
+]
+\`\`\`
+
+### 警报规则 (alertRules)
+- **type**: cpu/gpu/memory/swap/disk/net_in_speed/net_out_speed/net_all_speed/transfer_in/transfer_out/transfer_all/offline/load1/load5/load15/process_count/tcp_conn_count/udp_conn_count/temperature_max
+- **duration**: 持续时间(秒)，30% 以上时间触发阈值才会通知
+- **min** / **max**: 数值阈值，流量和网速单位为字节，其余使用百分比
+- **cover**: 1 忽略所有服务器，0 监控所有服务器
+- **ignore**: {服务器ID: true/false}
+
+示例:
+\`\`\`json
+[{"type": "offline", "duration": 10}]
+\`\`\`
+
+
 ## 交互指南
 **当用户请求不明确时，你应该这样询问：**
 
